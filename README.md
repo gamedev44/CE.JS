@@ -1,8 +1,8 @@
 # Cymatics Engine 3D (CE.js)
 
-[![Three.js](https://img.shields.io/badge/three.js-v0.152.2-blue)](https://threejs.org/) [![License: IWI‐PCL](https://img.shields.io/badge/License-IWI--PCL-red)](#license)
+[![Three.js](https://img.shields.io/badge/three.js-v0.152.2-blue)](https://threejs.org/) [![License: IWI‐PCL](https://img.shields.io/badge/License-IWI--PCL-red)](https://github.com/gamedev44/CE.JS/blob/main/License.html)
 
-> Real-time 3D particle & wave‐shaping engine built on Three.js
+> Real-time 3D particle & wave-shaping engine built on Three.js
 
 ---
 
@@ -35,7 +35,7 @@
   - Clustered vs. fluid behaviors
 
 - **Waveform Selection**  
-  Instant switch between Sine, Square, Triangle, Sawtooth.
+  Switch instantly between Sine, Square, Triangle, Sawtooth.
 
 - **Built-in Presets**  
   From atomic orbitals → galactic spirals.
@@ -47,14 +47,14 @@
 
 ## 🚀 Demo & Installation
 
-- **Live Demo:**  
-  Open in your browser — no build required.  
-  <https://your-live-demo-url.com>
+- **Live Demo**  
+  Try it in your browser—no build:  
+  <https://gamedev44.github.io/CE.JS/>
 
-- **Local Mode (Offline/GPU-accelerated):**  
-  1. Download the ZIP from GitHub.  
-  2. Unzip and open `index.html` in Chrome/Firefox.  
-  3. Enjoy full GPU/CPU utilization without lag.
+- **Local Mode (Offline/GPU-accelerated)**  
+  1. Download the ZIP from GitHub  
+  2. Unzip and open `index.html` in Chrome/Firefox  
+  3. Enjoy full GPU/CPU performance without lag
 
 ---
 
@@ -62,11 +62,11 @@
 
 ### Camera
 
-| Action  | Input                   |
-| ------- | ------------------------|
-| Rotate  | Left-click + drag       |
-| Pan     | Right-click + drag      |
-| Zoom    | Mouse wheel             |
+| Action  | Input                 |
+| ------- | ----------------------|
+| Rotate  | Left-click + drag     |
+| Pan     | Right-click + drag    |
+| Zoom    | Mouse wheel           |
 
 ### Pattern Parameters
 
@@ -93,7 +93,7 @@
 
 ## 🔧 Presets & Camera
 
-Presets live in `/src/presets/`. Each entry:
+Presets live in `/src/presets/`. Example entry:
 
 ```jsonc
 {
@@ -110,16 +110,13 @@ Presets live in `/src/presets/`. Each entry:
 
 ## ⚖️ License
 
-This project is proprietary under the **IronWill Interactive Proprietary Contributor License (IWI-PCL)**.
-Unauthorized use, distribution, or modification is prohibited.
+See full terms under the [IWI-PCL License](https://github.com/gamedev44/CE.JS/blob/main/License.html).
 
 ---
 
 ## 👥 Credits
 
 * **Joshua Herrell** — Founder & CEO, IronWill Interactive Entertainment
-
-> Built with passion at IronWill Interactive Entertainment.
 
 ```
 ```
