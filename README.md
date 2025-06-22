@@ -1,6 +1,6 @@
 # Cymatics Engine 3D (CE.js)
 
-[![Three.js](https://img.shields.io/badge/three.js-v0.152.2-blue)](https://threejs.org/) [![License: IWI‐PCL](https://img.shields.io/badge/License-IWI--PCL-red)](https://github.com/gamedev44/CE.JS/blob/main/License.html)
+[![Three.js](https://img.shields.io/badge/three.js-v0.152.2-blue)](https://threejs.org/) [![License: IWI‐PCL](https://img.shields.io/badge/License-IWI--PCL-red)](https://gamedev44.github.io/CE.JS/License.html)
 
 > Real-time 3D particle & wave-shaping engine built on Three.js
 
@@ -110,7 +110,7 @@ Presets live in `/src/presets/`. Example entry:
 
 ## ⚖️ License
 
-See full terms under the [IWI-PCL License](https://github.com/gamedev44/CE.JS/blob/main/License.html).
+See full terms under the [IWI-PCL License](https://gamedev44.github.io/CE.JS/License.html).
 
 ---
 
