@@ -1,57 +1,126 @@
-Cymatics Engine 3D (CE.js)
-📋 Table of Contents
-🌟 Features
+````markdown
+# Cymatics Engine 3D (CE.js)
 
-🕹️ Controls
+[![Three.js](https://img.shields.io/badge/three.js-v0.152.2-blue)](https://threejs.org/) [![License: IWI‐PCL](https://img.shields.io/badge/License-IWI--PCL-red)](#license)
 
-⚖️ License
+> Real-time 3D particle & wave‐shaping engine built on Three.js
 
-👥 Credits
+---
 
-🌟 Features
-Real-time 3D Particle System: Simulates tens of thousands of particles smoothly in a 3D space using three.js.
+## 📋 Table of Contents
 
-Complex Wave Shaping: Utilizes multi-axis frequency modulation (XY and Z axes) to generate intricate, three-dimensional patterns from simple wave functions.
+1. [Features](#features)  
+2. [Demo & Installation](#demo--installation)  
+3. [Controls](#controls)  
+4. [Presets & Camera](#presets--camera)  
+5. [License](#license)  
+6. [Credits](#credits)  
 
-Advanced Physics Controls: Manipulate global forces such as center-point gravity, rotational vortex forces, and system-wide damping.
+---
 
-Inter-particle Interactions: Models both repulsion and cohesion forces to create more fluid, organic, and clustered particle behaviors.
+## 🌟 Features
 
-Selectable Waveforms: Instantly switch between Sine, Square, Triangle, and Sawtooth waveforms to fundamentally alter the texture and structure of the patterns.
+- **Real-time 3D Particles**  
+  Render tens of thousands of particles at 60 FPS.
 
-Built-in Presets: Includes a variety of curated presets to showcase the engine's capabilities, from atomic orbitals to galactic spirals.
+- **Multi-Axis Wave Shaping**  
+  XY & Z-axis frequency modulation for intricate structures.
 
-Full Camera Control: Orbit, pan, and zoom to view your creations from any angle.
+- **Advanced Physics**  
+  - Center-point gravity  
+  - Rotational vortex  
+  - Global damping
 
-🕹️ Controls
-The user interface is designed for experimentation and discovery.
+- **Inter-Particle Forces**  
+  - Repulsion & cohesion  
+  - Clustered vs. fluid behaviors
 
-Camera:
+- **Waveform Selection**  
+  Instant switch between Sine, Square, Triangle, Sawtooth.
 
-Rotate: Left-click and drag.
+- **Built-in Presets**  
+  From atomic orbitals → galactic spirals.
 
-Zoom: Mouse wheel scroll.
+- **Full Camera Control**  
+  Orbit, pan, zoom from any angle.
 
-Pan: Right-click and drag.
+---
 
-Frequency Sliders (XY Freq, Z Freq): These are the core of the pattern generation. They control the complexity of the shape along different spatial axes.
+## 🚀 Demo & Installation
 
-Physics Sliders (Amplitude, Gravity, etc.): These sliders control the forces acting upon the particles, influencing the energy, stability, and motion of the final shape.
+- **Live Demo:**  
+  Open in your browser — no build required.  
+  <https://your-live-demo-url.com>
 
-Interaction Sliders (Repulsion, Cohesion): These control how particles react to each other, allowing for more liquid or clustered effects.
+- **Local Mode (Offline/GPU-accelerated):**  
+  1. Download the ZIP from GitHub.  
+  2. Unzip and open `index.html` in Chrome/Firefox.  
+  3. Enjoy full GPU/CPU utilization without lag.
 
-Get Camera State: Position your camera to the perfect viewing angle, then click this button to generate the camPos and camZoom data needed for a new preset.
+---
 
-⚖️ License
-This project is proprietary and is governed by the IronWill Interactive Proprietary Contributor License (IWI-PCL).
+## 🕹️ Controls
 
-Access to the source code is granted on a case-by-case basis to authorized contributors only. Unauthorized copying, modification, distribution, or use of the source code or its assets is strictly prohibited and subject to legal action as outlined in the IWI-PCL.
+### Camera
 
-All contributions, including code and assets, become the sole intellectual property of IronWill Interactive Entertainment.
+| Action  | Input                   |
+| ------- | ------------------------|
+| Rotate  | Left-click + drag       |
+| Pan     | Right-click + drag      |
+| Zoom    | Mouse wheel             |
 
-👥 Credits
-Joshua Herrell: Founder, Owner, and CEO of IronWill Interactive Entertainment.
+### Pattern Parameters
 
-Hamza Ahmed: Co-Founder of IronWill Interactive Entertainment (formerly of the Game Developers Union 'GDU').
+- **Frequency**  
+  - XY Frequency slider  
+  - Z Frequency slider
 
-This simulation engine is a product of IronWill Interactive Entertainment.
+- **Physics**  
+  - Amplitude  
+  - Gravity  
+  - Damping  
+
+- **Interaction**  
+  - Repulsion  
+  - Cohesion  
+
+### Preset Export
+
+1. Position camera  
+2. Click **Get Camera State**  
+3. Copy `camPos` & `camZoom` into your preset JSON
+
+---
+
+## 🔧 Presets & Camera
+
+Presets live in `/src/presets/`. Each entry:
+
+```jsonc
+{
+  "name": "Galactic Spiral",
+  "waveform": "sine",
+  "freq": { "x": 4, "y": 3, "z": 1 },
+  "forces": { "gravity": 0.2, "vortex": 0.1, "damping": 0.05 },
+  "interaction": { "repel": 0.8, "cohere": 0.3 },
+  "camera": { "position": [1.2, 0.8, 2.5], "zoom": 1.4 }
+}
+````
+
+---
+
+## ⚖️ License
+
+This project is proprietary under the **IronWill Interactive Proprietary Contributor License (IWI-PCL)**.
+Unauthorized use, distribution, or modification is prohibited.
+
+---
+
+## 👥 Credits
+
+* **Joshua Herrell** — Founder & CEO, IronWill Interactive Entertainment
+
+> Built with passion at IronWill Interactive Entertainment.
+
+```
+```
