@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="An interactive 3D particle simulation that visualizes sound frequencies and wave patterns, inspired by Cymatics. Create beautiful, complex patterns in real-time.">
+    <meta name="keywords" content="cymatics, simulation, 3d, webgl, three.js, interactive, art, physics, generative art, sound visualization, particle system, asterisk">
+    <meta name="author" content="asterisk">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://your-github-username.github.io/your-repo-name/">
+<meta property="og:title" content="Cymatics Engine 3D by asterisk">
+<meta property="og:description" content="An interactive 3D particle simulation that visualizes sound frequencies and wave patterns.">
+<meta property="og:image" content="https://your-github-username.github.io/your-repo-name/preview-image.jpg">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://your-github-username.github.io/your-repo-name/">
+<meta property="twitter:title" content="Cymatics Engine 3D by asterisk">
+<meta property="twitter:description" content="An interactive 3D particle simulation that visualizes sound frequencies and wave patterns.">
+<meta property="twitter:image" content="https://your-github-username.github.io/your-repo-name/preview-image.jpg">
+
+<!-- Theme Color for Mobile Browsers -->
+<meta name="theme-color" content="#030712">
+    <title>Cymatics Engine 3D (Optimized & Stable)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- THREE.js and OrbitControls -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; overflow: hidden; }
+        canvas { background-color: #030712; display: block; }
+        .control-panel {
+            background-color: rgba(17, 24, 39, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        input[type="range"] {
+            -webkit-appearance: none; appearance: none; width: 100%; height: 6px;
+            background: rgba(255, 255, 255, 0.2); border-radius: 3px;
+            outline: none; transition: background 0.3s;
+        }
+        input[type="range"]:hover { background: rgba(255, 255, 255, 0.3); }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none; width: 18px; height: 18px;
+            background: #ffffff; cursor: pointer; border-radius: 50%;
+            border: 2px solid #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.7);
+        }
+        select {
+            -webkit-appearance: none; appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat; background-size: 1.5em 1.5em; padding-right: 2.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 flex items-center justify-center h-screen p-0">
+
+    <canvas id="cymaticsCanvas" class="absolute top-0 left-0"></canvas>
+
+    <!-- Control Panel -->
+    <div class="control-panel absolute top-4 left-4 p-5 rounded-lg shadow-2xl flex flex-col gap-5 w-[360px] text-white">
+        <div>
+            <h1 class="text-xl font-bold text-white">Cymatics Engine 3D</h1>
+            <p class="text-xs text-gray-400">Drag to rotate, Scroll to zoom, Right-drag to pan.</p>
+        </div>
+        <div class="flex items-center justify-between gap-3">
+            <button id="startStopBtn" class="w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded-md shadow-lg hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all text-sm">Start</button>
+            <button id="resetBtn" class="w-full px-4 py-2 bg-red-600 text-white font-semibold rounded-md shadow-lg hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-400 transition-all text-sm">Reset Sim</button>
+        </div>
+        <div class="space-y-2"><label for="preset-selector" class="text-sm font-medium text-gray-300">Presets</label>
+            <select id="preset-selector" class="w-full bg-gray-900/50 border border-gray-700 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                <option>Custom</option>
+                <option>Atom & Orbiting Electron Clouds</option>
+                <option>Orbiting Geodesics</option>
+                <option>Nebula</option>
+                <option>Sand Dollar</option>
+            </select>
+        </div>
+        <div class="space-y-2"><label for="wave-type" class="text-sm font-medium text-gray-300">Waveform</label>
+            <select id="wave-type" class="w-full bg-gray-900/50 border border-gray-700 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                <option>Sine</option><option>Square</option><option>Triangle</option><option>Sawtooth</option>
+            </select>
+        </div>
+        <div id="controls" class="space-y-4 text-gray-200 text-sm">
+            <div class="grid grid-cols-[auto,1fr,auto] items-center gap-3"><span class="font-medium text-gray-400 w-20">XY Freq 1</span><input id="f1-slider" type="range" min="-30" max="30" step="1" value="5" title="Frequency XY 1"><span id="f1-value" class="font-mono bg-gray-900/50 w-12 text-center py-1 rounded">5</span></div>
+            <div class="grid grid-cols-[auto,1fr,auto] items-center gap-3"><span class="font-medium text-gray-400 w-20">XY Freq 2</span><input id="f2-slider" type="range" min="-30" max="30" step="1" value="5" title="Frequency XY 2"><span id="f2-value" class="font-mono bg-gray-900/50 w-12 text-center py-1 rounded">5</span></div>
+            <hr class="border-gray-600"/>
+            <div class="grid grid-cols-[auto,1fr,auto] items-center gap-3"><span class="font-medium text-gray-400 w-20">Z Freq 1</span><input id="f3-slider" type="range" min="-30" max="30" step="1" value="0" title="Frequency Z 1"><span id="f3-value" class="font-mono bg-gray-900/50 w-12 text-center py-1 rounded">0</span></div>
+            <div class="grid grid-cols-[auto,1fr,auto] items-center gap-3"><span class="font-medium text-gray-400 w-20">Z Freq 2</span><input id="f4-slider" type="range" min="-30" max="30" step="1" value="0" title="Frequency Z 2"><span id="f4-value" class="font-mono bg-gray-900/50 w-12 text-center py-1 rounded">0</span></div>
+            <div class="grid grid-cols-[auto,1fr,auto] items-center gap-3"><span class="font-medium text-gray-400 w-20">Z Freq 3</span><input id="f5-slider" type="range" min="-30" max="30" step="1" value="0" title="Frequency Z 3"><span id="f5-value" class="font-mono bg-gray-900/50 w-12 text-center py-1 rounded">0</span></div>
+            <hr class="border-gray-700"/>
+            <div class="grid grid-cols-[auto,1fr,auto] items-center gap-3"><span class="font-medium text-gray-400 w-20">Amplitude</span><input id="amp-slider" type="range" min="10" max="1500" step="5" value="200" title="Amplitude"><span id="amp-value" class="font-mono bg-gray-900/50 w-12 text-center py-1 rounded">200</span></div>
+            <div class="grid grid-cols-[auto,1fr,auto] items-center gap-3"><span class="font-medium text-gray-400 w-20">Gravity</span><input id="gravity-slider" type="range" min="0" max="0.1" step="0.001" value="0.01" title="Center Gravity"><span id="gravity-value" class="font-mono bg-gray-900/50 w-12 text-center py-1 rounded">0.010</span></div>
+            <div class="grid grid-cols-[auto,1fr,auto] items-center gap-3"><span class="font-medium text-gray-400 w-20">Vortex</span><input id="vortex-slider" type="range" min="-0.5" max="0.5" step="0.005" value="0.0" title="Vortex Strength"><span id="vortex-value" class="font-mono bg-gray-900/50 w-12 text-center py-1 rounded">0.000</span></div>
+            <div class="grid grid-cols-[auto,1fr,auto] items-center gap-3"><span class="font-medium text-gray-400 w-20">Damping</span><input id="damping-slider" type="range" min="0.90" max="1.0" step="0.005" value="0.97" title="Damping (Friction)"><span id="damping-value" class="font-mono bg-gray-900/50 w-12 text-center py-1 rounded">0.970</span></div>
+            <hr class="border-gray-700"/>
+            <div class="grid grid-cols-[auto,1fr,auto] items-center gap-3"><span class="font-medium text-gray-400 w-20">Repulsion</span><input id="repulsion-slider" type="range" min="0" max="50" step="0.1" value="0.0" title="Particle Repulsion"><span id="repulsion-value" class="font-mono bg-gray-900/50 w-12 text-center py-1 rounded">0.0</span></div>
+            <div class="grid grid-cols-[auto,1fr,auto] items-center gap-3"><span class="font-medium text-gray-400 w-20">Cohesion</span><input id="cohesion-slider" type="range" min="0" max="0.01" step="0.0001" value="0.0" title="Particle Cohesion"><span id="cohesion-value" class="font-mono bg-gray-900/50 w-12 text-center py-1 rounded">0.0000</span></div>
+            <hr class="border-gray-700"/>
+            <div class="grid grid-cols-[auto,1fr,auto] items-center gap-3"><span class="font-medium text-gray-400 w-20">Particles</span><input id="particles-slider" type="range" min="500" max="50000" step="100" value="1000" title="Particle Count"><span id="particles-value" class="font-mono bg-gray-900/50 w-12 text-center py-1 rounded">1k</span></div>
+        </div>
+        <!-- Camera State Tool -->
+        <div id="camera-tool" class="mt-4 pt-4 border-t border-gray-700 text-xs space-y-2">
+             <button id="getCameraStateBtn" class="w-full px-3 py-2 bg-gray-700 text-white font-semibold rounded-md hover:bg-gray-600 transition-all text-sm">Get Camera State for Preset</button>
+             <input id="cameraStateOutput" type="text" readonly class="w-full bg-gray-900/70 p-2 rounded-md text-gray-300 text-center font-mono" placeholder="Camera data will appear here...">
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const startStopBtn = document.getElementById('startStopBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const waveTypeSelector = document.getElementById('wave-type');
+            const presetSelector = document.getElementById('preset-selector');
+            const getCameraStateBtn = document.getElementById('getCameraStateBtn');
+            const cameraStateOutput = document.getElementById('cameraStateOutput');
+            const sliders = { f1: document.getElementById('f1-slider'), f2: document.getElementById('f2-slider'), f3: document.getElementById('f3-slider'), f4: document.getElementById('f4-slider'), f5: document.getElementById('f5-slider'), amp: document.getElementById('amp-slider'), gravity: document.getElementById('gravity-slider'), vortex: document.getElementById('vortex-slider'), damping: document.getElementById('damping-slider'), repulsion: document.getElementById('repulsion-slider'), cohesion: document.getElementById('cohesion-slider'), particles: document.getElementById('particles-slider')};
+            const values = { f1: document.getElementById('f1-value'), f2: document.getElementById('f2-value'), f3: document.getElementById('f3-value'), f4: document.getElementById('f4-value'), f5: document.getElementById('f5-value'), amp: document.getElementById('amp-value'), gravity: document.getElementById('gravity-value'), vortex: document.getElementById('vortex-value'), damping: document.getElementById('damping-value'), repulsion: document.getElementById('repulsion-value'), cohesion: document.getElementById('cohesion-value'), particles: document.getElementById('particles-value')};
+            
+            let simulationRunning = false;
+            let animationFrameId;
+            let config = {};
+            
+            const canvas = document.getElementById('cymaticsCanvas');
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, powerPreference: "high-performance" });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 5000);
+            camera.position.z = 800;
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+
+            let particleSystem;
+            let positions, velocities, colors;
+            
+            const presets = {
+                "Atom & Orbiting Electron Clouds": { f1: 0, f2: 0, f3: 7, f4: 6, f5: 0, amp: 750, gravity: 0.015, vortex: 0.03, damping: 0.97, waveType: "Sine", repulsion: 0, cohesion: 0, particles: 1900, camPos: {x: 0, y: 800, z: 1}, camZoom: 1.0 },
+                "Orbiting Geodesics": { f1: 1, f2: 0, f3: 0, f4: 0, f5: 0, amp: 1500, gravity: 0.014, vortex: 0.12, damping: 0.98, waveType: "Sine", repulsion: 3.3, cohesion: 0.0058, particles: 1900, camPos: {x: 200, y: 700, z: 200}, camZoom: 1.0 },
+                "Nebula": { f1: 1, f2: 1, f3: 1, f4: 1, f5: 1, amp: 600, gravity: 0.001, vortex: 0.1, damping: 0.99, waveType: "Sine", repulsion: 0.5, cohesion: 0.0001, camPos: {x: -934.89, y: 3180.89, z: 1705.35}, camZoom: 1.00 },
+                "Sand Dollar": { f1: 7, f2: 0, f3: 2, f4: 0, f5: 0, amp: 440, gravity: 0.005, vortex: -0.025, damping: 0.950, waveType: "Sine", repulsion: 1, cohesion: 0, camPos: {x: 0, y: 0, z: 800}, camZoom: 1.0 }
+            };
+            
+            const TWO_PI = 2 * Math.PI; const PI = Math.PI;
+            const waveFunctions = {
+                Sine: (t) => Math.sin(t), Square: (t) => (t % TWO_PI) < PI ? 1 : -1,
+                Triangle: (t) => Math.asin(Math.sin(t)) * (2 / PI), Sawtooth: (t) => ((t / TWO_PI) % 1) * 2 - 1
+            };
+            let currentWave = waveFunctions.Sine;
+            
+            class SpatialGrid {
+                constructor(bounds, dimensions) { this.bounds = bounds; this.dimensions = dimensions; this.cells = new Map(); }
+                getHash(x, y, z) {
+                    const ix = Math.floor((x - this.bounds[0]) / this.dimensions[0]);
+                    const iy = Math.floor((y - this.bounds[1]) / this.dimensions[1]);
+                    const iz = Math.floor((z - this.bounds[2]) / this.dimensions[2]);
+                    return `${ix},${iy},${iz}`;
+                }
+                insert(pointIndex) { 
+                    const i3 = pointIndex * 3;
+                    const hash = this.getHash(positions[i3], positions[i3+1], positions[i3+2]); 
+                    if (!this.cells.has(hash)) this.cells.set(hash, []); 
+                    this.cells.get(hash).push(pointIndex); 
+                }
+                query(point, radius) {
+                    const neighbors = []; const R2 = radius*radius;
+                    const { x, y, z } = point;
+                    const [dimX, dimY, dimZ] = this.dimensions;
+                    const [boundX, boundY, boundZ] = this.bounds;
+                    const iX = Math.floor((x - boundX) / dimX); const iY = Math.floor((y - boundY) / dimY); const iZ = Math.floor((z - boundZ) / dimZ);
+                    for (let i = -1; i <= 1; i++) for (let j = -1; j <= 1; j++) for (let k = -1; k <= 1; k++) {
+                        const hash = `${iX + i},${iY + j},${iZ + k}`;
+                        if (this.cells.has(hash)) {
+                            for (const index of this.cells.get(hash)) {
+                                if (index === point.index) continue;
+                                const dx = x - positions[index*3]; const dy = y - positions[index*3+1]; const dz = z - positions[index*3+2];
+                                if (dx*dx+dy*dy+dz*dz < R2) neighbors.push(index);
+                            }
+                        }
+                    }
+                    return neighbors;
+                }
+                clear() { this.cells.clear(); }
+            }
+            const grid = new SpatialGrid([-2000, -2000, -2000], [100, 100, 100]);
+
+
+            function initParticles(count) {
+                if (particleSystem) { scene.remove(particleSystem); particleSystem.geometry.dispose(); particleSystem.material.dispose(); }
+                positions = new Float32Array(count * 3);
+                velocities = new Float32Array(count * 3);
+                colors = new Float32Array(count * 3);
+                for (let i = 0; i < count; i++) {
+                    const i3 = i * 3;
+                    positions[i3] = (Math.random() - 0.5) * 1000;
+                    positions[i3+1] = (Math.random() - 0.5) * 1000;
+                    positions[i3+2] = (Math.random() - 0.5) * 1000;
+                }
+                const geometry = new THREE.BufferGeometry();
+                geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+                const material = new THREE.PointsMaterial({ size: 2.5, vertexColors: true, sizeAttenuation: true, blending: THREE.AdditiveBlending, depthWrite: false });
+                particleSystem = new THREE.Points(geometry, material);
+                scene.add(particleSystem);
+            }
+
+            function animate() {
+                if (!simulationRunning) return;
+                animationFrameId = requestAnimationFrame(animate);
+                
+                const { f1, f2, f3, f4, f5, amp, gravity, vortex, damping, repulsion, cohesion, drift } = config;
+                const particleCount = config.particles;
+                
+                if (repulsion > 0 || cohesion > 0) {
+                    grid.clear();
+                    for (let i = 0; i < particleCount; i++) {
+                        grid.insert(i);
+                    }
+                }
+
+                for (let i = 0; i < particleCount; i++) {
+                    const i3 = i * 3;
+                    const x = positions[i3]; const y = positions[i3 + 1]; const z = positions[i3 + 2];
+                    
+                    const r = Math.sqrt(x*x + y*y + z*z);
+                    if (r === 0) continue;
+                    const theta = Math.atan2(y, x); const phi = Math.acos(z / r);
+
+                    const w_theta1 = currentWave(f1 * theta); const w_theta2 = currentWave(f2 * theta);
+                    const w_phi1 = currentWave(f3 * phi); const w_phi2 = currentWave(f4 * phi); const w_phi3 = currentWave(f5 * phi);
+                    const targetR = amp * (w_theta1 + w_theta2 + w_phi1 + w_phi2 + w_phi3);
+                    
+                    const radialForce = (targetR - r) * 0.001;
+                    let fx = radialForce * Math.sin(phi) * Math.cos(theta);
+                    let fy = radialForce * Math.sin(phi) * Math.sin(theta);
+                    let fz = radialForce * Math.cos(phi);
+
+                    fx -= x * gravity; fy -= y * gravity; fz -= z * gravity;
+                    const r_xz = Math.sqrt(x*x + z*z);
+                    if (r_xz > 1) { fx -= (z / r_xz) * vortex; fz += (x / r_xz) * vortex; }
+                    
+                    if (repulsion > 0 || cohesion > 0) {
+                        const neighbors = grid.query({x,y,z, index: i}, 50);
+                        for (const j of neighbors) {
+                            const j3 = j * 3;
+                            const dx = x-positions[j3]; const dy=y-positions[j3+1]; const dz=z-positions[j3+2];
+                            const distSq = dx*dx + dy*dy + dz*dz;
+                            if (distSq > 1e-4 && distSq < 2500) {
+                                const dist = Math.sqrt(distSq);
+                                const force = Math.max(-0.5, Math.min(0.5, (repulsion / distSq) - cohesion)); // Clamp force
+                                const invDist = force / dist;
+                                fx += dx * invDist; fy += dy * invDist; fz += dz * invDist;
+                            }
+                        }
+                    }
+                    
+                    velocities[i3] += fx; velocities[i3 + 1] += fy; velocities[i3 + 2] += fz;
+                    velocities[i3] *= damping; velocities[i3 + 1] *= damping; velocities[i3 + 2] *= damping;
+                    
+                    velocities[i3] += (Math.random() - 0.5) * drift;
+                    velocities[i3+1] += (Math.random() - 0.5) * drift;
+                    velocities[i3+2] += (Math.random() - 0.5) * drift;
+
+                    positions[i3] += velocities[i3]; positions[i3+1] += velocities[i3+1]; positions[i3+2] += velocities[i3+2];
+                    
+                    const speed = Math.sqrt(velocities[i3]**2 + velocities[i3+1]**2 + velocities[i3+2]**2);
+                    const lightness = Math.min(1.0, 0.3 + speed * 0.5);
+                    const hue = 0.5 + Math.min(0.5, speed * 0.05);
+                    const color = new THREE.Color().setHSL(hue, 1.0, lightness);
+                    colors[i3] = color.r; colors[i3+1] = color.g; colors[i3+2] = color.b;
+                }
+                particleSystem.geometry.attributes.position.needsUpdate = true;
+                particleSystem.geometry.attributes.color.needsUpdate = true;
+                
+                controls.update();
+                renderer.render(scene, camera);
+            }
+
+            function applyPreset(presetName) {
+                if (!presets[presetName]) return;
+                const preset = presets[presetName];
+                const currentParticles = preset.particles || config.particles || 1000;
+                
+                config = { f1:0, f2:0, f3:0, f4:0, f5:0, repulsion:0, cohesion:0, drift: 0.05, ...preset, particles: currentParticles };
+                
+                for (const key in sliders) {
+                    if(config[key] !== undefined) {
+                        sliders[key].value = config[key];
+                         if (key === 'particles') { values[key].textContent = (config[key] >= 1000) ? `${(config[key]/1000).toFixed(1)}k`.replace('.0','') : config[key];}
+                         else if (['gravity','vortex','damping', 'repulsion', 'cohesion'].includes(key)) { values[key].textContent = config[key].toFixed(4).replace(/\.?0+$/, "") || "0";}
+                         else { values[key].textContent = config[key].toFixed(0); }
+                    }
+                }
+                waveTypeSelector.value = config.waveType;
+                currentWave = waveFunctions[config.waveType];
+                
+                if (!particleSystem || currentParticles !== particleSystem.geometry.attributes.position.count) {
+                   initParticles(currentParticles);
+                }
+
+                if (preset.camPos) {
+                    camera.position.set(preset.camPos.x, preset.camPos.y, preset.camPos.z);
+                    camera.zoom = preset.camZoom || 1.0;
+                    camera.updateProjectionMatrix();
+                    controls.target.set(0,0,0);
+                    controls.update();
+                }
+            }
+
+            function setupEventListeners() {
+                Object.keys(sliders).forEach(key => {
+                    sliders[key].addEventListener('input', (e) => {
+                        config[key] = parseFloat(e.target.value);
+                        if(key === 'particles') {
+                           values[key].textContent = (config[key] >= 1000) ? `${(config[key]/1000).toFixed(1)}k`.replace('.0','') : config[key];
+                           initParticles(config.particles);
+                        } else if(['gravity','vortex','damping','repulsion','cohesion'].includes(key)) {
+                             values[key].textContent = config[key].toFixed(4).replace(/\.?0+$/, "") || "0";
+                        } else {
+                            values[key].textContent = config[key].toFixed(0);
+                        }
+                        presetSelector.value = "Custom";
+                    });
+                });
+                
+                waveTypeSelector.addEventListener('change', (e) => { config.waveType = e.target.value; presetSelector.value = "Custom"; });
+                presetSelector.addEventListener('change', (e) => { if (e.target.value !== "Custom") applyPreset(e.target.value); });
+                
+                startStopBtn.addEventListener('click', () => {
+                    simulationRunning = !simulationRunning;
+                    if (simulationRunning) {
+                        startStopBtn.textContent = 'Stop'; startStopBtn.classList.replace('bg-blue-600', 'bg-yellow-500'); animate();
+                    } else {
+                        startStopBtn.textContent = 'Start'; startStopBtn.classList.replace('bg-yellow-500', 'bg-blue-600');
+                    }
+                });
+
+                resetBtn.addEventListener('click', () => {
+                    presetSelector.value = "Atom & Orbiting Electron Clouds"; 
+                    applyPreset("Atom & Orbiting Electron Clouds");
+                });
+                
+                getCameraStateBtn.addEventListener('click', () => {
+                    const pos = camera.position;
+                    const zoom = camera.zoom;
+                    const output = `camPos: {x: ${pos.x.toFixed(2)}, y: ${pos.y.toFixed(2)}, z: ${pos.z.toFixed(2)}}, camZoom: ${zoom.toFixed(2)}`;
+                    cameraStateOutput.value = output;
+                    cameraStateOutput.select();
+                    try {
+                      document.execCommand('copy');
+                    } catch (err) {
+                      console.error('Could not copy camera state to clipboard');
+                    }
+                });
+
+                window.addEventListener('resize', () => {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                    if (!simulationRunning) renderer.render(scene, camera);
+                });
+            }
+            
+            initParticles(1000); // Initialize with default particle count first
+            applyPreset("Atom & Orbiting Electron Clouds"); // Then apply the preset
+            presetSelector.value = "Atom & Orbiting Electron Clouds";
+            setupEventListeners();
+            renderer.render(scene, camera);
+        });
+    </script>
+</body>
+</html>
