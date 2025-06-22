@@ -1,18 +1,18 @@
-Cymatics Engine 3D (CE.js)
+# Cymatics Engine 3D (CE.js)
 🌟 Features
-Real-time 3D Particle System: Simulates tens of thousands of particles smoothly in a 3D space using three.js.
+- Real-time 3D Particle System: Simulates tens of thousands of particles smoothly in a 3D space using three.js.
 
-Complex Wave Shaping: Utilizes multi-axis frequency modulation (XY and Z axes) to generate intricate, three-dimensional patterns from simple wave functions.
+- Complex Wave Shaping: Utilizes multi-axis frequency modulation (XY and Z axes) to generate intricate, three-dimensional patterns from simple wave functions.
 
-Advanced Physics Controls: Manipulate global forces such as center-point gravity, rotational vortex forces, and system-wide damping.
+- Advanced Physics Controls: Manipulate global forces such as center-point gravity, rotational vortex forces, and system-wide damping.
 
-Inter-particle Interactions: Models both repulsion and cohesion forces to create more fluid, organic, and clustered particle behaviors.
+- Inter-particle Interactions: Models both repulsion and cohesion forces to create more fluid, organic, and clustered particle behaviors.
 
-Selectable Waveforms: Instantly switch between Sine, Square, Triangle, and Sawtooth waveforms to fundamentally alter the texture and structure of the patterns.
+- Selectable Waveforms: Instantly switch between Sine, Square, Triangle, and Sawtooth waveforms to fundamentally alter the texture and structure of the patterns.
 
-Built-in Presets: Includes a variety of curated presets to showcase the engine's capabilities, from atomic orbitals to galactic spirals.
+- Built-in Presets: Includes a variety of curated presets to showcase the engine's capabilities, from atomic orbitals to galactic spirals.
 
-Full Camera Control: Orbit, pan, and zoom to view your creations from any angle.
+- Full Camera Control: Orbit, pan, and zoom to view your creations from any angle.
 
 🕹️ Controls
 The user interface is designed for experimentation and discovery.
