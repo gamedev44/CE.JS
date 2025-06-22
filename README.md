@@ -1,4 +1,3 @@
-````markdown
 # Cymatics Engine 3D (CE.js)
 
 [![Three.js](https://img.shields.io/badge/three.js-v0.152.2-blue)](https://threejs.org/) [![License: IWI‐PCL](https://img.shields.io/badge/License-IWI--PCL-red)](#license)
