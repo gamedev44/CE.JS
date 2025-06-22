@@ -45,10 +45,10 @@
 
 ---
 
-## 🚀 Demo & Installation
+# 🚀 Play Now & Local Installation Info
 
 - **Live Demo**  
-  Try it in your browser—no build:  
+  ##  Try it in your browser—no build:  
   <https://gamedev44.github.io/CE.JS/>
 
 - **Local Mode (Offline/GPU-accelerated)**  
